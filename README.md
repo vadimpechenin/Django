@@ -4,6 +4,10 @@
 python 3.8.8
 Django 4.2.1
 
+https://docs.djangoproject.com/en/4.2/topics/http/urls/
+https://proproprogs.ru/django4
+
+
 Команды для начала:
 django-admin #список команд
 django-admin startproject имясайта #создание проекта

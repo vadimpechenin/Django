@@ -1,5 +1,6 @@
-from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 
 def index(request): #HttpRequest
@@ -18,7 +19,15 @@ def categories_by_slug(request, cat_slug):
 
 def archive(request, year):
     if year > 2023:
-        raise Http404
+        uri = reverse('cats', args=('music', )) #можно и кортеж, и список
+        #return redirect('/', permanent=True) - перенаправление на главную страницу с кодом 301
+        #return redirect(index) # перенаправление на главную страницу с кодом 302 (временная)
+        return redirect(uri) #лучшая практика перенаправления, имя машрута
+        #Вместо redirect
+        #return HttpResponseRedirect(uri) #302
+        #return HttpResponsePermanentRedirect(uri)  # 301
+        #Просто обработка ошибки
+        #raise Http404
 
     return HttpResponse(f"<h1>Архив по годам</h1><p>{year}<p>")
 

@@ -5,13 +5,20 @@
     <title>{{ title }}</title> <!--    title|default:"Без заголовка"-->
 </head>
     <body>
-        <p>{{ menu|join:" | " }}</p> <!-- |first |last-->
-        <p>{{ float|divisibleby:"2" }}</p><!--  add:"50" -->
-        <p>{{ lst|length }}</p>
-        <p>{{ set }}</p>
-        <p>{{ dict.key_1 }} {{ dict.key_2 }}</p>
-        <p>{{ obj.a }}</p>
-        <p>{{ url }}</p>
+        <p>{{ menu|join:" | " }}</p>
         <h1>{{ title|capfirst|cut:","|cut:"?" }}</h1>
+        <ul>
+            {% for p in posts %}
+                {% if p.is_published %}
+                    <li>
+                        <h2>{{ p.title }}</h2>
+                        <p>{{ p.content }}</p>
+                        {% if not forloop.last %}
+                            <hr>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
     </body>
 </html>

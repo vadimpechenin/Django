@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound#, Http404, HttpRespon
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.template.loader import render_to_string
-
+from django.template.defaultfilters import slugify #импорт фильтров для страницы
 menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
 
 class MyClass:
@@ -14,13 +14,14 @@ def index(request): #HttpRequest
     #t = render_to_string('women/index.html') #чтобы не подхватывались иные index.html из других прилоений,
                                              # помещаем в подкаталог women
     #return HttpResponse(t)
-    data = {'title': 'Главная страница',
+    data = {'title': 'главная, страница?',
             'menu': menu,
             'float': 28.56,
             'lst': [1, 2, 'abc', True],
             'set': {1, 2, 3, 2, 5},
             'dict': {'key_1': 'value_1', 'key_2': 'value_2'},
-            'obj': MyClass(10, 20)
+            'obj': MyClass(10, 20),
+            'url': slugify("The Main Page")
             }
     return render(request, 'women/index.html', context = data)
 

@@ -4,13 +4,18 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify #импорт фильтров для страницы
 
-menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
 
+menu = [
+    {'title': 'О сайте', 'url_name': 'about'},
+    {'title': 'Добавить статью', 'url_name': 'add_page'},
+    {'title': 'Обратная связь', 'url_name': 'contact'},
+    {'title': 'Войти', 'url_name': 'login'},
+]
 
 data_db = [
     {'id': 1, 'title': 'Анджелина Джоли', 'content': 'Биография Анджелины Джоли', 'is_published': True},
-    {'id': 1, 'title': 'Марго Робби', 'content': 'Биография Марго Робби', 'is_published': False},
-    {'id': 1, 'title': 'Джулия Робертс', 'content': 'Биография Джулия Робертс', 'is_published': True}
+    {'id': 2, 'title': 'Марго Робби', 'content': 'Биография Марго Робби', 'is_published': False},
+    {'id': 3, 'title': 'Джулия Робертс', 'content': 'Биография Джулия Робертс', 'is_published': True}
 ]
 # Шаблоны по документации https://docs.djangoproject.com/en/4.2/ref/templates
 def index(request): #HttpRequest
@@ -27,29 +32,21 @@ def about(request):
     data = {'title': 'О сайте'}
     return render(request, 'women/about.html', data)
 
-def categories(request, cat_id: int):
-    return HttpResponse(f"<h1>Статьи по категориям</h1><p>id: {cat_id}<p>")
+
+def show_post(request, post_id):
+    return HttpResponse(f"Отображение статьи с id = {post_id}")
 
 
-def categories_by_slug(request, cat_slug):
-    if request.POST:
-        print(request.POST)
-    return HttpResponse(f"<h1>Статьи по категориям</h1><p>slug: {cat_slug}<p>")
+def addpage(request):
+    return HttpResponse("Добавление статьи")
 
 
-def archive(request, year):
-    if year > 2023:
-        uri = reverse('cats', args=('music', )) #можно и кортеж, и список
-        #return redirect('/', permanent=True) - перенаправление на главную страницу с кодом 301
-        #return redirect(index) # перенаправление на главную страницу с кодом 302 (временная)
-        return redirect(uri) #лучшая практика перенаправления, имя машрута
-        #Вместо redirect
-        #return HttpResponseRedirect(uri) #302
-        #return HttpResponsePermanentRedirect(uri)  # 301
-        #Просто обработка ошибки
-        #raise Http404
+def contact(request):
+    return HttpResponse("Обратная связь")
 
-    return HttpResponse(f"<h1>Архив по годам</h1><p>{year}<p>")
+
+def login(request):
+    return HttpResponse("Авторизация")
 
 
 def page_not_found(request, exception):

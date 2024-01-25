@@ -3,16 +3,30 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.template.loader import render_to_string
 
+menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
+
+class MyClass:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
 
 def index(request): #HttpRequest
     #t = render_to_string('women/index.html') #чтобы не подхватывались иные index.html из других прилоений,
                                              # помещаем в подкаталог women
     #return HttpResponse(t)
-    return render(request, 'women/index.html')
+    data = {'title': 'Главная страница',
+            'menu': menu,
+            'float': 28.56,
+            'lst': [1, 2, 'abc', True],
+            'set': {1, 2, 3, 2, 5},
+            'dict': {'key_1': 'value_1', 'key_2': 'value_2'},
+            'obj': MyClass(10, 20)
+            }
+    return render(request, 'women/index.html', context = data)
 
 def about(request):
-
-    return render(request, 'women/about.html')
+    data = {'title': 'О сайте'}
+    return render(request, 'women/about.html', data)
 
 def categories(request, cat_id: int):
     return HttpResponse(f"<h1>Статьи по категориям</h1><p>id: {cat_id}<p>")

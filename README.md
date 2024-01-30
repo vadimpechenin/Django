@@ -5,6 +5,7 @@
 python 3.8.8
 Django 4.2.1
 ipython 8.12.3
+django-extension
 
 ##Полезные ссылки
 https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -48,3 +49,6 @@ https://proproprogs.ru/django4
 ##Посмотреть запросы
 >>>from django.db import connection
 >>>connection.queries
+
+##Работа в оболочке django-extension
+>>>python manage.py shell_plus --print-sql

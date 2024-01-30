@@ -26,3 +26,12 @@ django-admin startproject имясайта #создание проекта
 
 ##Сбор всех статических файлов из проектов в единый
 python manage.py collectstatic
+
+##Создание файлов миграций
+python manage.py makemigrations
+
+## Выполнение запросов к бд
+### СОздание запроса
+python manage.py sqlmigrate women 0001 // 0001_initial нужен только номер
+### собсвтенно выполнение запросов к бд
+python manage.py migrate

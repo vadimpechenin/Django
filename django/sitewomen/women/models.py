@@ -11,3 +11,10 @@ class Women(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        #Специальный вложенный класс для создания методов работы с объектами
+        ordering = ['-time_create']
+        indexes = [
+            models.Index(fields=['-time_create'])
+        ]
+

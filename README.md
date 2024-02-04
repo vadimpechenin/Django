@@ -63,3 +63,23 @@ https://proproprogs.ru/django4
 >>>Women.objects.exclude(pk=2) //Выбирает все записи, за исключением указаного - аналог NOT
 >>>Women.objects.get(pk=2) // метод get возвращает строго одну запись, не список
 
+>>>Women.objects.order_by("title") // сортировка по title, ORDER BY
+>>>Women.objects.filter(pk__lte=4).order_by("title") //  WHERE "women_women"."id" <= 4 ORDER BY "women_women"."title" ASC
+>>>Women.objects.order_by("-title") // сортировка по возрастанию,  ORDER BY "women_women"."title" DESC
+//Изменение записей в БД
+>>>wu = Women.objects.get(pk=2)
+>>>wu.title = 'Марго Робби'
+>>>wu.save()
+//Изменение всех записей таблицы
+>>>Women.objects.update(поле_для_изменения=новое_значение)
+>>> Women.objects.filter(pk__lte=4).update(is_published=1) // обновили первые 4 записи при помощи filter, срезы использовать нельзя
+//Удаление записей
+>>>wd = Women.objects.filter(pk__gte=5) //отобрали записи
+>>>wd.delete() // собственно удаление. Можно в одну строчку с предыдущим
+
+
+
+
+
+
+

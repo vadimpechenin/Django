@@ -1,9 +1,10 @@
 from django.http import HttpResponse, HttpResponseNotFound#, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify #импорт фильтров для страницы
 
+from women.models import Women
 
 menu = [
     {'title': 'О сайте', 'url_name': 'about'},
@@ -30,9 +31,11 @@ def index(request): #HttpRequest
     #t = render_to_string('women/index.html') #чтобы не подхватывались иные index.html из других прилоений,
                                              # помещаем в подкаталог women
     #return HttpResponse(t)
+    posts = Women.objects.filter(is_published=1)
+
     data = {'title': 'главная, страница?',
             'menu': menu,
-            'posts': data_db,
+            'posts': posts,
             'cat_selected': 0,
             }
     return render(request, 'women/index.html', context = data)
@@ -43,8 +46,16 @@ def about(request):
     return render(request, 'women/about.html', data)
 
 
-def show_post(request, post_id):
-    return HttpResponse(f"Отображение статьи с id = {post_id}")
+def show_post(request, post_slug):
+    post = get_object_or_404(Women, slug=post_slug)
+
+    data = {
+        'title': post.title,
+        'menu': menu,
+        'post': post,
+        'cat_selected': 1,
+    }
+    return render(request, 'women/post.html', data)
 
 
 def addpage(request):

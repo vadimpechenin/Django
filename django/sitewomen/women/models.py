@@ -21,7 +21,8 @@ class Women(models.Model):
     time_create = models.DateTimeField(auto_now_add=True) #автоматически заполняется поле в момент появления записи
     time_update = models.DateTimeField(auto_now=True) #при изменении записи меняется поле
     is_published = models.BooleanField(choices=Status.choices, default = Status.DRAFT)
-
+    #cat = models.ForeignKey('Category', models.PROTECT, null=True) #хитрость, когда нужно создать categories, а записи в Women уже есть
+    cat = models.ForeignKey('Category', models.PROTECT) #Category как строка, т.к. класс определен ниже
     # Менеджер по умолчанию
     objects = models.Manager()
     # новый менеджер
@@ -40,3 +41,9 @@ class Women(models.Model):
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug})
 
+class Category(models.Model):
+    name = models.CharField(max_length = 100, db_index=True)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True)
+
+    def __str__(self):
+        return self.name

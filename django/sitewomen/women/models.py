@@ -26,7 +26,7 @@ class Women(models.Model):
     objects = models.Manager()
     # новый менеджер
     published = PublishedManager()
-    
+
     def __str__(self):
         return self.title
 

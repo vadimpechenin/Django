@@ -31,7 +31,8 @@ def index(request): #HttpRequest
     #t = render_to_string('women/index.html') #чтобы не подхватывались иные index.html из других прилоений,
                                              # помещаем в подкаталог women
     #return HttpResponse(t)
-    posts = Women.objects.filter(is_published=1)
+    # posts = Women.objects.filter(is_published=1)
+    posts = Women.published.all()  # Выбрали все опубликованные статьи
 
     data = {'title': 'главная, страница?',
             'menu': menu,

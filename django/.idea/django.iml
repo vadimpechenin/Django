@@ -5,8 +5,9 @@
       <sourceFolder url="file://$MODULE_DIR$/sitewomen" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/djvenv" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/delint" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (django)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.8 (djvenv)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

@@ -85,6 +85,21 @@ https://proproprogs.ru/django4
 4. models.SET_DEFAULT - то же самое, что и SET_NULL, только вместо значения NULL устанавливает значение по умолчанию, которое должно быть определено через класс ForeignKey
 5. models.DO_NOTHING - удаление записи в первичной модели не вызывает никаких действий у вторичных моделей
 
+## Связь многие к одному
+>>>Women.objects.filter(cat__slug="aktrisy") //обращение к полю связанной таблицы через поле ForeignKey текущей таблицы, двойное подчеркивание
+>>>Category.objects.filter(posts__title__contains="ли").distinct()
+/* 
+SELECT DISTINCT "women_category"."id",
+       "women_category"."name",
+       "women_category"."slug"
+  FROM "women_category"
+ INNER JOIN "women_women"
+    ON ("women_category"."id" = "women_women"."cat_id")
+ WHERE "women_women"."title" LIKE '%ли%' ESCAPE '\'
+ LIMIT 21
+ */
+
+
 
 
 

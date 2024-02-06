@@ -22,7 +22,7 @@ class Women(models.Model):
     time_update = models.DateTimeField(auto_now=True) #при изменении записи меняется поле
     is_published = models.BooleanField(choices=Status.choices, default = Status.DRAFT)
     #cat = models.ForeignKey('Category', models.PROTECT, null=True) #хитрость, когда нужно создать categories, а записи в Women уже есть
-    cat = models.ForeignKey('Category', models.PROTECT) #Category как строка, т.к. класс определен ниже
+    cat = models.ForeignKey('Category', models.PROTECT, related_name='posts') #Category как строка, т.к. класс определен ниже
     # Менеджер по умолчанию
     objects = models.Manager()
     # новый менеджер

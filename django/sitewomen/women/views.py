@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify #импорт фильтров для страницы
 
-from women.models import Women
+from women.models import Women, Category
 
 menu = [
     {'title': 'О сайте', 'url_name': 'about'},
@@ -21,11 +21,6 @@ data_db = [
     {'id': 3, 'title': 'Джулия Робертс', 'content': 'Биография Джулия Робертс', 'is_published': True}
 ]
 
-cats_db = [
-    {'id': 1, 'name': 'Актрисы'},
-    {'id': 2, 'name': 'Певицы'},
-    {'id': 3, 'name': 'Спортсменки'},
-]
 # Шаблоны по документации https://docs.djangoproject.com/en/4.2/ref/templates
 def index(request): #HttpRequest
     #t = render_to_string('women/index.html') #чтобы не подхватывались иные index.html из других прилоений,
@@ -71,11 +66,14 @@ def login(request):
     return HttpResponse("Авторизация")
 
 
-def show_category(request, cat_id):
-    data = {'title': 'главная, страница?',
+def show_category(request, cat_slug):
+    category = get_object_or_404(Category, slug = cat_slug)
+    posts = Women.published.filter(cat_id = category.pk)
+
+    data = {'title': f'Рубрика: {category.name}',
             'menu': menu,
-            'posts': data_db,
-            'cat_selected': cat_id,
+            'posts': posts,
+            'cat_selected': category.pk,
             }
     return render(request, 'women/index.html', context = data)
 

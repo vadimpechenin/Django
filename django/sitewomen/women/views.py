@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify #импорт фильтров для страницы
 
-from women.models import Women, Category
+from women.models import Women, Category, TagPost
 
 menu = [
     {'title': 'О сайте', 'url_name': 'about'},
@@ -74,6 +74,18 @@ def show_category(request, cat_slug):
             'menu': menu,
             'posts': posts,
             'cat_selected': category.pk,
+            }
+    return render(request, 'women/index.html', context = data)
+
+def show_tag_post_list(request, tag_slug):
+    tag = get_object_or_404(TagPost, slug = tag_slug)
+    posts = tag.tags.filter(is_published=Women.Status.PUBLISHED)
+
+    data = {
+            'title': f'Тег: {tag.tag}',
+            'menu': menu,
+            'posts': posts,
+            'cat_selected': None,
             }
     return render(request, 'women/index.html', context = data)
 

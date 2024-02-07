@@ -24,6 +24,7 @@ class Women(models.Model):
     #cat = models.ForeignKey('Category', models.PROTECT, null=True) #хитрость, когда нужно создать categories, а записи в Women уже есть
     cat = models.ForeignKey('Category', on_delete = models.PROTECT, related_name='posts') #Category как строка, т.к. класс определен ниже
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags')
+    husband = models.OneToOneField('Husband', on_delete=models.SET_NULL, null=True, blank=True, related_name='woman')
 
     # Менеджер по умолчанию
     objects = models.Manager()
@@ -62,3 +63,11 @@ class TagPost(models.Model):
 
     def get_absolute_url(self):
         return reverse('tag', kwargs={'tag_slug': self.slug})
+
+
+class Husband(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.name

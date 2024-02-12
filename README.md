@@ -99,9 +99,26 @@ SELECT DISTINCT "women_category"."id",
  LIMIT 21
  */
 
+## Q-классы
+// Позволяет делать логическое OR и не только
+>>>Women.objects.filter(pk__lt=5, cat_id=2) // По умолчанию только AND 
+/*
+ FROM "women_women"
+ WHERE ("women_women"."cat_id" = 2 AND "women_women"."id" < 5)
+*/
+>>>Women.objects.filter(Q(pk__lt=5) | Q(cat_id=2))
+/*
+ FROM "women_women"
+ WHERE ("women_women"."id" < 5 OR "women_women"."cat_id" = 2)
+*/
+>>>Women.objects.filter(Q(pk__lt=5) & Q(cat_id=2)) //Теперь AND
 
+>>>Women.objects.filter(~Q(pk__lt=5) | Q(cat_id=2)) //Теперь есть NOT и OR
 
-
+>>>Women.objects.filter(Q(pk__in=[1, 2, 5]) | Q(cat_id=2), title__icontains="ра")
+/*
+ WHERE (("women_women"."id" IN (1, 2, 5) OR "women_women"."cat_id" = 2) AND "women_women"."title" LIKE '%ра%' ESCAPE '\')
+*/
 
 
 

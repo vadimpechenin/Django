@@ -177,18 +177,64 @@ Execution time: 0.000000s [Database: default]
 [1, 'Брэд Питт', 30, 3, 9]
 */
 
->>>lst = Husband.objects.all().annotate(work_age=F("age")-20)
+//Полезные вычисление - вычисление стажа по возрасту и зарплаты
+>>>lst = Husband.objects.all().annotate(work_age=F("age")-20), salary=F("age")*1.1)
 /*
 SELECT "women_husband"."id",
        "women_husband"."name",
        "women_husband"."age",
        "women_husband"."m_count",
        ("women_husband"."age" - 20) AS "work_age"
+       ("women_husband"."age" * 1.1) AS "salary"
   FROM "women_husband"
 
 Execution time: 0.000000s [Database: default]
-['id', 'name', 'age', 'm_count', 'work_age']
-[1, 'Брэд Питт', 30, 3, 10]
+['id', 'name', 'age', 'm_count', 'work_age', 'salary']
+[1, 'Брэд Питт', 30, 3, 10, 33.0]
+*/
+## Count, Sum, Avg, Max, Min. Метод values()
+>>>Women.objects.count()
+/*
+SELECT COUNT(*) AS "__count"
+  FROM "women_women"
+*/
+>>>from django.db.models import Count, Sum, Avg, Max, Min
+
+>>>Husband.objects.aggregate(Min("age"))
+/*
+SELECT MIN("women_husband"."age") AS "age__min"
+  FROM "women_husband"
 */
 
+>>>Husband.objects.aggregate(Min("age"), Max("age"))
+/*
+SELECT MIN("women_husband"."age") AS "age__min",
+       MAX("women_husband"."age") AS "age__max"
+  FROM "women_husband"
+*/
+>>>Husband.objects.aggregate(young = Min("age"), old = Max("age"))
+/*
+SELECT MIN("women_husband"."age") AS "young",
+       MAX("women_husband"."age") AS "old"
+  FROM "women_husband"
+*/
+>>>Husband.objects.aggregate(res = Max("age")-Abg("age"))
 
+// values - отбор нужных полей
+>>>Women.objects.values("title","cat_id")
+/*
+SELECT "women_women"."title",
+       "women_women"."cat_id"
+  FROM "women_women"
+ ORDER BY "women_women"."time_create" DESC
+*/
+// Запрос из нескольких связанных таблиц
+>>>Women.objects.values("title","cat__name").get(pk=1)
+/*
+SELECT "women_women"."title",
+       "women_category"."name"
+  FROM "women_women"
+ INNER JOIN "women_category"
+    ON ("women_women"."cat_id" = "women_category"."id")
+ WHERE "women_women"."id" = 1
+*/

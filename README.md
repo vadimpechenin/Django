@@ -120,6 +120,75 @@ SELECT DISTINCT "women_category"."id",
  WHERE (("women_women"."id" IN (1, 2, 5) OR "women_women"."cat_id" = 2) AND "women_women"."title" LIKE '%ра%' ESCAPE '\')
 */
 
+## F, Value и метод annotate()
+// F представляет значение поля модели, преобразованное значение поля модели или аннотированный столбец.
+// Он позволяет ссылаться на значения полей модели и выполнять операции с базой данных, 
+// используя их без необходимости извлекать их из базы данных в память Python.
+>>>from django.db.models import F
 
+>>>Women.objects.filter(pk__gt=F("cat_id"))
+/*
+ WHERE "women_women"."id" > ("women_women"."cat_id")
+ */
+>>>Husband.objects.update(m_count=F("m_count")+1)
+/*
+UPDATE "women_husband"
+SET "m_count" = ("women_husband"."m_count" + 1)
+*/
+
+// Метод annotate позволяет создавать новые, дополнительные вычисляемые поля
+>>> from django.db.models import Value
+
+>>>lst = Husband.objects.all().annotate(is_married=Value(True))
+>>>for i, x in enumerate(lst):
+...:     if i==0:
+...:         print(list(x.__dict__)[1:])
+...:     print(list(x.__dict__.values())[1:])
+...:
+
+/*
+SELECT "women_husband"."id",
+       "women_husband"."name",
+       "women_husband"."age",
+       "women_husband"."m_count",
+       1 AS "is_married"
+  FROM "women_husband"
+  
+['id', 'name', 'age', 'm_count', 'is_married']
+[1, 'Брэд Питт', 30, 3, True]
+*/
+>>>lst = Husband.objects.all().annotate(is_married=F("m_count")*3)
+
+>>>for i, x in enumerate(lst):
+...:     if i==0:
+...:         print(list(x.__dict__)[1:])
+...:     print(list(x.__dict__.values())[1:])
+...:
+/*
+SELECT "women_husband"."id",
+       "women_husband"."name",
+       "women_husband"."age",
+       "women_husband"."m_count",
+       ("women_husband"."m_count" * 3) AS "is_married"
+  FROM "women_husband"
+
+Execution time: 0.000000s [Database: default]
+['id', 'name', 'age', 'm_count', 'is_married']
+[1, 'Брэд Питт', 30, 3, 9]
+*/
+
+>>>lst = Husband.objects.all().annotate(work_age=F("age")-20)
+/*
+SELECT "women_husband"."id",
+       "women_husband"."name",
+       "women_husband"."age",
+       "women_husband"."m_count",
+       ("women_husband"."age" - 20) AS "work_age"
+  FROM "women_husband"
+
+Execution time: 0.000000s [Database: default]
+['id', 'name', 'age', 'm_count', 'work_age']
+[1, 'Брэд Питт', 30, 3, 10]
+*/
 
 

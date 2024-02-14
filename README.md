@@ -238,3 +238,42 @@ SELECT "women_women"."title",
     ON ("women_women"."cat_id" = "women_category"."id")
  WHERE "women_women"."id" = 1
 */
+
+## Группировка записей
+>>>Women.objects.values("cat_id").annotate(Count("id"))
+/*
+SELECT "women_women"."cat_id",
+       COUNT("women_women"."id") AS "id__count"
+  FROM "women_women"
+ GROUP BY "women_women"."cat_id"
+ [] <QuerySet [{'cat_id': 1, 'id__count': 4}, {'cat_id': 2, 'id__count': 1}]>
+*/
+>>>lst = Category.objects.annotate(total=Count("posts")).filter(total__gt=0) // через annotate считаем количество постов, потом отбираем чтобы количество было >0
+/*
+SELECT "women_category"."id",
+       "women_category"."name",
+       "women_category"."slug",
+       COUNT("women_women"."id") AS "total"
+  FROM "women_category"
+  LEFT OUTER JOIN "women_women"
+    ON ("women_category"."id" = "women_women"."cat_id")
+ GROUP BY "women_category"."id",
+          "women_category"."name",
+          "women_category"."slug"
+HAVING COUNT("women_women"."id") > 0
+*/
+
+## Функции на стороне СУБД
+>>>from django.db.models.functions import Length
+>>>lst = Husband.objects.annotate(len_name=Length('name'))
+/*
+SELECT "women_husband"."id",
+       "women_husband"."name",
+       "women_husband"."age",
+       "women_husband"."m_count",
+       LENGTH("women_husband"."name") AS "len_name"
+  FROM "women_husband"
+
+[] ['id', 'name', 'age', 'm_count', 'len_name']
+[1, 'Брэд Питт', 30, 3, 9]
+*/

@@ -6,6 +6,7 @@ python 3.8.8
 Django 4.2.1
 ipython 8.12.3
 django-extensions 3.2.3
+django-debug-toolbar 4.3.0
 
 ## Полезные ссылки
 https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -31,6 +32,15 @@ https://proproprogs.ru/django4
 
 ## Создание файлов миграций
 >>>python manage.py makemigrations
+
+## Работа в админ-панели
+//Создание супер-пользователя
+>>>python manage.py createsuperuser
+root
+root@sitewomen.ru
+1234
+
+//В браузере по адресу http://127.0.0.1:8000/admin/login/
 
 ## Выполнение запросов к бд
 ### Создание запроса

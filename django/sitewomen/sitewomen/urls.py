@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('women.urls')),
     #можно сделать path('women/', include('women.urls')) тогда все пути будут #http://127.0.0.1:8000/women/ + суффикс из urls в women
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
 
 

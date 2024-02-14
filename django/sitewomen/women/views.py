@@ -13,21 +13,13 @@ menu = [
     {'title': 'Войти', 'url_name': 'login'},
 ]
 
-data_db = [
-    {'id': 1, 'title': 'Анджелина Джоли', 'content': '''<h1>Анджелина Джоли</h1> (англ. Angelina Jolie[7], при рождении Войт (англ. Voight), ранее Джоли Питт (англ. Jolie Pitt); род. 4 июня 1975, Лос-Анджелес, Калифорния, США) — американская актриса кино, телевидения и озвучивания, кинорежиссёр, сценаристка, продюсер, фотомодель, посол доброй воли ООН.
-    Обладательница премии «Оскар», трёх премий «Золотой глобус» (первая актриса в истории, три года подряд выигравшая премию) и двух «Премий Гильдии киноактёров США».''',
-     'is_published': True},
-    {'id': 2, 'title': 'Марго Робби', 'content': 'Биография Марго Робби', 'is_published': False},
-    {'id': 3, 'title': 'Джулия Робертс', 'content': 'Биография Джулия Робертс', 'is_published': True}
-]
-
 # Шаблоны по документации https://docs.djangoproject.com/en/4.2/ref/templates
 def index(request): #HttpRequest
     #t = render_to_string('women/index.html') #чтобы не подхватывались иные index.html из других прилоений,
                                              # помещаем в подкаталог women
     #return HttpResponse(t)
     # posts = Women.objects.filter(is_published=1)
-    posts = Women.published.all()  # Выбрали все опубликованные статьи
+    posts = Women.published.all().select_related('cat')  # Выбрали все опубликованные статьи, "Жадная загрузка" связанных категорий
 
     data = {'title': 'главная, страница?',
             'menu': menu,
@@ -68,7 +60,7 @@ def login(request):
 
 def show_category(request, cat_slug):
     category = get_object_or_404(Category, slug = cat_slug)
-    posts = Women.published.filter(cat_id = category.pk)
+    posts = Women.published.filter(cat_id = category.pk).select_related('cat')
 
     data = {'title': f'Рубрика: {category.name}',
             'menu': menu,
@@ -79,7 +71,7 @@ def show_category(request, cat_slug):
 
 def show_tag_post_list(request, tag_slug):
     tag = get_object_or_404(TagPost, slug = tag_slug)
-    posts = tag.tags.filter(is_published=Women.Status.PUBLISHED)
+    posts = tag.tags.filter(is_published=Women.Status.PUBLISHED).select_related('cat')
 
     data = {
             'title': f'Тег: {tag.tag}',

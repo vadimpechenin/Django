@@ -20,6 +20,12 @@ class MarriedFilter(admin.SimpleListFilter):
 
 @admin.register(Women)  #аналог admin.site.register(Women, WomenAdmin)
 class WomenAdmin(admin.ModelAdmin):
+    fields = ['title', 'slug', 'content', 'cat', 'husband','tags'] #Отображаемые поля для редактирования
+    #exclude = ['tags', 'is_published'] #поля, которые не будут отображаться
+    #readonly_fields = ['slug'] #нередактируемые поля
+    prepopulated_fields = {"slug": ("title", )} #генерация поля автоматически
+    #filter_horizontal = ["tags"]
+    filter_vertical = ["tags"]
     list_display = ('title', 'time_create', 'is_published', 'cat','brief_info') # поля для отображения в таблице
     list_display_links = ('title',) # какие поля позволяют перейти к описанию объекта
     ordering = ['-time_create', 'title'] #сортировка по полям

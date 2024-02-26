@@ -7,6 +7,7 @@ Django 4.2.1
 ipython 8.12.3
 django-extensions 3.2.3
 django-debug-toolbar 4.3.0
+pillow 10.2.0
 
 ## Полезные ссылки
 https://docs.djangoproject.com/en/4.2/topics/http/urls/

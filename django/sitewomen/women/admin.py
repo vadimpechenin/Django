@@ -1,4 +1,6 @@
 from django.contrib import admin, messages
+from django.utils.safestring import mark_safe
+
 from women.models import Women, Category
 
 
@@ -20,13 +22,13 @@ class MarriedFilter(admin.SimpleListFilter):
 
 @admin.register(Women)  #аналог admin.site.register(Women, WomenAdmin)
 class WomenAdmin(admin.ModelAdmin):
-    fields = ['title', 'slug', 'content', 'cat', 'husband','tags'] #Отображаемые поля для редактирования
+    fields = ['title', 'slug', 'content', 'photo', 'post_photo', 'cat', 'husband','tags'] #Отображаемые поля для редактирования
     #exclude = ['tags', 'is_published'] #поля, которые не будут отображаться
-    #readonly_fields = ['slug'] #нередактируемые поля
+    readonly_fields = ['post_photo'] #нередактируемые поля
     prepopulated_fields = {"slug": ("title", )} #генерация поля автоматически
     #filter_horizontal = ["tags"]
     filter_vertical = ["tags"]
-    list_display = ('title', 'time_create', 'is_published', 'cat','brief_info') # поля для отображения в таблице
+    list_display = ('title', 'post_photo', 'time_create', 'is_published', 'cat') # поля для отображения в таблице
     list_display_links = ('title',) # какие поля позволяют перейти к описанию объекта
     ordering = ['-time_create', 'title'] #сортировка по полям
     list_editable = ('is_published',) #Кортеж полей для изменения
@@ -34,11 +36,15 @@ class WomenAdmin(admin.ModelAdmin):
     actions=['set_published','set_draft'] #Список задаваемых действий
     search_fields = ['title__startswith','cat__name'] #Дополнительная панель поиск
     list_filter = [MarriedFilter, 'cat__name', 'is_published'] #поля, по которым будем делать фильтрацию
+    save_on_top = True
 
-    @admin.display(description="Краткое описание", ordering="content")
-    def brief_info(self, women: Women):
-        #Метод для пользовательского поля, которого нет в БД
-        return f"Описание {len(women.content)} символов."
+    @admin.display(description="Изображение", ordering="content")
+    def post_photo(self, women: Women):
+        #Метод для возвращения пути к фото, его отображения
+        if women.photo:
+            return mark_safe(f"<img src=' {women.photo.url}' width=50>")
+        else:
+            return "Без фото"
 
     @admin.action(description="Опубликовать выбранные записи")
     def set_published(self, request, queryset):
